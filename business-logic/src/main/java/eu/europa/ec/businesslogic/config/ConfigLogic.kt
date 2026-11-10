@@ -58,6 +58,17 @@ interface ConfigLogic {
      * Set if the wallet requires PID Activation.
      */
     val forcePidActivation: Boolean get() = false
+
+    /**
+     * Base URL of the VerifAI contract audit API (API Gateway), read from `local.properties`.
+     */
+    val auditApiBaseUrl: String get() = BuildConfig.VERIFAI_AUDIT_API_URL
+
+    /**
+     * Application key sent when the audit API issues a session. It filters casual calls; it is
+     * not authentication, because it can be extracted from the APK.
+     */
+    val auditAppKey: String get() = BuildConfig.VERIFAI_AUDIT_APP_KEY
 }
 
 enum class AppFlavor {
