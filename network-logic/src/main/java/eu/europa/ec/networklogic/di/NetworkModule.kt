@@ -18,6 +18,8 @@ package eu.europa.ec.networklogic.di
 
 import eu.europa.ec.businesslogic.config.AppBuildType
 import eu.europa.ec.businesslogic.config.ConfigLogic
+import eu.europa.ec.networklogic.repository.AuditRepository
+import eu.europa.ec.networklogic.repository.AuditRepositoryImpl
 import eu.europa.ec.networklogic.repository.WalletAttestationRepository
 import eu.europa.ec.networklogic.repository.WalletAttestationRepositoryImpl
 import io.ktor.client.HttpClient
@@ -33,6 +35,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Configuration
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 @Module
@@ -71,3 +74,29 @@ fun provideHttpClient(json: Json, configLogic: ConfigLogic): HttpClient {
 @Single
 fun provideWalletAttestationRepository(httpClient: HttpClient): WalletAttestationRepository =
     WalletAttestationRepositoryImpl(httpClient)
+
+/**
+ * HTTP client for the contract audit. It has no Logging plugin on purpose: requests carry the
+ * session token, presigned S3 URLs and the contract itself, which must never reach logcat.
+ */
+@Single
+@Named(AUDIT_HTTP_CLIENT)
+fun provideAuditHttpClient(json: Json): HttpClient {
+    return HttpClient(Android) {
+        install(ContentNegotiation) {
+            json(
+                json = json,
+                contentType = ContentType.Application.Json
+            )
+        }
+    }
+}
+
+@Single
+fun provideAuditRepository(
+    @Named(AUDIT_HTTP_CLIENT) httpClient: HttpClient,
+    configLogic: ConfigLogic,
+    json: Json,
+): AuditRepository = AuditRepositoryImpl(httpClient, configLogic, json)
+
+const val AUDIT_HTTP_CLIENT = "auditHttpClient"

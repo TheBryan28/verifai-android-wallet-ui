@@ -21,6 +21,8 @@ import eu.europa.ec.businesslogic.BuildConfig
 import eu.europa.ec.businesslogic.config.AppBuildType
 import eu.europa.ec.businesslogic.config.ConfigLogic
 import eu.europa.ec.businesslogic.config.ConfigLogicImpl
+import eu.europa.ec.businesslogic.controller.audit.AuditStorageController
+import eu.europa.ec.businesslogic.controller.audit.AuditStorageControllerImpl
 import eu.europa.ec.businesslogic.controller.crypto.CryptoController
 import eu.europa.ec.businesslogic.controller.crypto.CryptoControllerImpl
 import eu.europa.ec.businesslogic.controller.crypto.KeystoreController
@@ -73,6 +75,10 @@ fun providePrefsController(resourceProvider: ResourceProvider): PrefsController 
 @Single
 fun providePrefKeys(prefsController: PrefsController): PrefKeys =
     PrefKeysImpl(prefsController)
+
+@Single
+fun provideAuditStorageController(resourceProvider: ResourceProvider): AuditStorageController =
+    AuditStorageControllerImpl(resourceProvider)
 
 @Single
 fun provideKeystoreController(
