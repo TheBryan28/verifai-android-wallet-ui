@@ -17,6 +17,7 @@
 package eu.europa.ec.dashboardfeature.di
 
 import eu.europa.ec.businesslogic.config.ConfigLogic
+import eu.europa.ec.businesslogic.controller.audit.AuditStorageController
 import eu.europa.ec.businesslogic.controller.log.LogController
 import eu.europa.ec.businesslogic.controller.storage.PrefKeys
 import eu.europa.ec.businesslogic.provider.UuidProvider
@@ -31,6 +32,10 @@ import eu.europa.ec.dashboardfeature.interactor.DashboardInteractor
 import eu.europa.ec.dashboardfeature.interactor.DashboardInteractorImpl
 import eu.europa.ec.dashboardfeature.interactor.DocumentDetailsInteractor
 import eu.europa.ec.dashboardfeature.interactor.DocumentDetailsInteractorImpl
+import eu.europa.ec.dashboardfeature.interactor.DocumentAuditInteractor
+import eu.europa.ec.dashboardfeature.interactor.DocumentAuditInteractorImpl
+import eu.europa.ec.dashboardfeature.interactor.DocumentReader
+import eu.europa.ec.dashboardfeature.interactor.DocumentReaderImpl
 import eu.europa.ec.dashboardfeature.interactor.DocumentSignInteractor
 import eu.europa.ec.dashboardfeature.interactor.DocumentSignInteractorImpl
 import eu.europa.ec.dashboardfeature.interactor.DocumentsInteractor
@@ -45,6 +50,7 @@ import eu.europa.ec.dashboardfeature.interactor.TransactionHistoryInteractor
 import eu.europa.ec.dashboardfeature.interactor.TransactionHistoryInteractorImpl
 import eu.europa.ec.dashboardfeature.interactor.TransactionsInteractor
 import eu.europa.ec.dashboardfeature.interactor.TransactionsInteractorImpl
+import eu.europa.ec.networklogic.repository.AuditRepository
 import eu.europa.ec.resourceslogic.provider.ResourceProvider
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Configuration
@@ -114,6 +120,23 @@ fun provideTransactionInteractor(
     resourceProvider,
     filterValidator,
     walletCoreTransactionLogController
+)
+
+@Factory
+fun provideDocumentReader(resourceProvider: ResourceProvider): DocumentReader =
+    DocumentReaderImpl(resourceProvider)
+
+@Factory
+fun provideDocumentAuditInteractor(
+    auditRepository: AuditRepository,
+    auditStorageController: AuditStorageController,
+    documentReader: DocumentReader,
+    resourceProvider: ResourceProvider,
+): DocumentAuditInteractor = DocumentAuditInteractorImpl(
+    auditRepository,
+    auditStorageController,
+    documentReader,
+    resourceProvider,
 )
 
 @Factory
