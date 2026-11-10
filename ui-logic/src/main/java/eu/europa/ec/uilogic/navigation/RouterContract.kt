@@ -55,6 +55,18 @@ sealed class DashboardScreens {
 
     data object DocumentSign : Screen(name = "DOCUMENT_SIGN")
 
+    data object AuditProgress : Screen(
+        name = "AUDIT_PROGRESS",
+        parameters = "?analysisId={analysisId}"
+    )
+
+    data object AuditReport : Screen(
+        name = "AUDIT_REPORT",
+        parameters = "?analysisId={analysisId}"
+    )
+
+    data object AuditHistory : Screen(name = "AUDIT_HISTORY")
+
     data object DocumentDetails : Screen(
         name = "DOCUMENT_DETAILS",
         parameters = "?documentId={documentId}"

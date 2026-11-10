@@ -24,6 +24,9 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import eu.europa.ec.dashboardfeature.BuildConfig
+import eu.europa.ec.dashboardfeature.ui.audit.history.AuditHistoryScreen
+import eu.europa.ec.dashboardfeature.ui.audit.progress.AuditProgressScreen
+import eu.europa.ec.dashboardfeature.ui.audit.report.AuditReportScreen
 import eu.europa.ec.dashboardfeature.ui.dashboard.DashboardScreen
 import eu.europa.ec.dashboardfeature.ui.document_sign.DocumentSignScreen
 import eu.europa.ec.dashboardfeature.ui.documents.detail.DocumentDetailsScreen
@@ -79,6 +82,48 @@ fun NavGraphBuilder.featureDashboardGraph(navController: NavController) {
             route = DashboardScreens.DocumentSign.screenRoute
         ) {
             DocumentSignScreen(navController, koinViewModel())
+        }
+
+        composable(
+            route = DashboardScreens.AuditProgress.screenRoute,
+            arguments = listOf(
+                navArgument("analysisId") {
+                    type = NavType.StringType
+                },
+            )
+        ) {
+            AuditProgressScreen(
+                navController,
+                koinViewModel(
+                    parameters = {
+                        parametersOf(it.arguments?.getString("analysisId").orEmpty())
+                    }
+                )
+            )
+        }
+
+        composable(
+            route = DashboardScreens.AuditReport.screenRoute,
+            arguments = listOf(
+                navArgument("analysisId") {
+                    type = NavType.StringType
+                },
+            )
+        ) {
+            AuditReportScreen(
+                navController,
+                koinViewModel(
+                    parameters = {
+                        parametersOf(it.arguments?.getString("analysisId").orEmpty())
+                    }
+                )
+            )
+        }
+
+        composable(
+            route = DashboardScreens.AuditHistory.screenRoute
+        ) {
+            AuditHistoryScreen(navController, koinViewModel())
         }
 
         composable(
