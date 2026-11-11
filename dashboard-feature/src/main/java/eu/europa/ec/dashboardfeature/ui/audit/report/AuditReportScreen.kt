@@ -326,7 +326,10 @@ private fun FindingCard(finding: AuditFinding, expanded: Boolean, onToggle: () -
                                 text = stringResource(R.string.audit_report_sources),
                                 style = MaterialTheme.typography.labelLarge,
                             )
-                            finding.citations.forEach { CitationLink(it) }
+                            // A long article indexed in several fragments can be cited more than once
+                            finding.citations
+                                .distinctBy { it.norm to (it.article ?: it.sourceId) }
+                                .forEach { CitationLink(it) }
                         }
                     }
                 }
