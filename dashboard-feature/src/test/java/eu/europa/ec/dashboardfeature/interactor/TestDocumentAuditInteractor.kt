@@ -201,6 +201,17 @@ class TestDocumentAuditInteractor {
         }
 
     @Test
+    fun `Given the API reports COMPLETED as stage, When refresh is called, Then the last pipeline stage is kept`() =
+        runTest {
+            storage.saveRecord(pendingRecord().copy(status = AuditStatus.PROCESSING, stage = "ANALYZING_WITH_AI"))
+            repository.status = statusResponse(AuditStatus.COMPLETED, stage = "COMPLETED", reportUrl = "https://s3/report")
+
+            val record = interactor.refresh("analysis-1").getOrThrow()
+
+            assertEquals("ANALYZING_WITH_AI", record.stage)
+        }
+
+    @Test
     fun `Given the report is already on the phone, When refresh is called, Then the API is not called`() = runTest {
         storage.saveRecord(pendingRecord().copy(status = AuditStatus.COMPLETED, hasReport = true))
 
