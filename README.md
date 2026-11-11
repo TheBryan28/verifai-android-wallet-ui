@@ -1,3 +1,20 @@
+# VerifAI Wallet
+
+Fork of the EU Digital Identity reference wallet, extended with an AI contract
+auditor. Master's thesis project at UNIR (2026).
+
+## What we added on top of the EU reference app
+- Contract audit flow: the user submits a contract before signing and receives
+  the clauses that put them at risk, with the applicable Colombian legislation
+- Serverless back end on AWS Lambda: [verifai-wallet-lambdas](https://github.com/TheBryan28/verifai-wallet-lambdas)
+- Amazon Bedrock with RAG over a corpus of Colombian law
+- JWT authentication with signing keys managed in AWS KMS
+- Our own credential issuer: [verifai-eudi-srv-pid-issuer](https://github.com/TheBryan28/verifai-eudi-srv-pid-issuer)
+
+## What comes from the EU project
+Credential issuance, presentation, proximity sharing and document signing (RQES).
+See the original README below.
+
 # EUDI Android Wallet reference application
 
 [![License: EUPL 1.2](https://img.shields.io/badge/License-EUPL%201.2-blue.svg)](https://joinup.ec.europa.eu/software/page/eupl)
