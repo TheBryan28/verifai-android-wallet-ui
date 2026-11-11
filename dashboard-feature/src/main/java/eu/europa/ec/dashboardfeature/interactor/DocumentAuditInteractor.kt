@@ -189,7 +189,8 @@ class DocumentAuditInteractorImpl(
 
         val updated = record.copy(
             status = status.status,
-            stage = status.stage ?: record.stage,
+            // The API reports COMPLETED or FAILED as the stage of finished analyses: keep the last pipeline stage
+            stage = status.stage?.takeIf { code -> AuditStage.entries.any { it.code == code } } ?: record.stage,
             errorMessage = status.errorMessage,
             pages = status.pages ?: record.pages,
             clauseCount = status.clauseCount ?: record.clauseCount,
